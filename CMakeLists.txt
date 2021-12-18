@@ -1,10 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 option(EXAMPLE "shall we complie example" on)
-#INCLUDE(build_for_r328)
+INCLUDE(build_for_h3)
 #INCLUDE(build_for_rk3308)
 
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
 PROJECT(CppDemo)
 
@@ -30,13 +30,14 @@ ELSEIF (UNIX)
     add_subdirectory(epoll)
 ENDIF ()
 
-set(EXEC_NAME cxxdemo)
+set(EXEC_NAME wlutils)
 
 add_executable(${EXEC_NAME} main.cc
     uart.cc
+    inotify.cc
 )
 
 target_link_libraries(${EXEC_NAME} 
-
+    multiplexing
 )
 

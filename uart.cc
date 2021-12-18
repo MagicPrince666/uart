@@ -14,11 +14,39 @@
 
 #include <iostream>
 
-#define BAUDRATE     B115200
+#define BAUDRATE     115200
 
 #define DEBUG_UART 0
 
 #define DATA_LEN    0xFF
+
+Uart::Uart(Xepoll *epoll, std::string device)
+: epoll_(epoll)
+{
+    std::cout << "uart init " << device << std::endl;
+
+    uart_fd_ = OpenSerial(device.c_str(), BAUDRATE);
+    if(uart_fd_ < 0) {
+        std::cout <<"can\'t open " << device <<" !" << std::endl;
+    } else tcflush(uart_fd_, TCIOFLUSH);//清空串口输入输出缓存
+
+    std::string cmd = "WLACC\r\n";
+    sendData(cmd.c_str(), cmd.size());
+
+    // 绑定回调函数
+    if (uart_fd_ > 0) {
+        std::cout << "Bind epoll" << std::endl;
+        epoll_->add(uart_fd_, std::bind(&Uart::UartLoop, this));
+    }
+}
+
+Uart::~Uart(void)
+{
+    std::cout << "uart deinit" << std::endl;
+
+    if(uart_fd_ > 0)
+        close(uart_fd_);
+}
 
 int Uart::OpenSerial(const char *cSerialName, int Bitrate)
 {
@@ -67,24 +95,6 @@ int Uart::OpenSerial(const char *cSerialName, int Bitrate)
     return iFd;
 }
 
-Uart::Uart(std::string device)
-{
-    std::cout << "uart init " << device << std::endl;
-
-    uart_fd_ = OpenSerial(device.c_str(), BAUDRATE);
-    if(uart_fd_ < 0) {
-        std::cout <<"can\'t open " << device <<" !" << std::endl;
-    } else tcflush(uart_fd_, TCIOFLUSH);//清空串口输入输出缓存
-}
-
-Uart::~Uart(void)
-{
-    std::cout << "uart deinit" << std::endl;
-
-    if(uart_fd_ > 0)
-        close(uart_fd_);
-}
-
 int Uart::sendData(const char* bufout, int size)
 {
     int len = write(uart_fd_, bufout, size);
@@ -111,6 +121,16 @@ bool Uart::UartLoop()
         }
         usleep(100000);
     }
+    delete[] buf;
+    return true;
+}
+
+bool Uart::UartRead()
+{
+    char* buf = new char[1024];
+    int len = read(uart_fd_, buf, 1024);
+    buf[len] = 0;
+    std::cout << buf << std::endl;
     delete[] buf;
     return true;
 }

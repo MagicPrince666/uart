@@ -15,8 +15,7 @@
  * - [ ] Add support for kqueue
  * - [ ] Add support for windows equivalent
  */
-#ifndef __EPOLLER_H__
-#define __EPOLLER_H__
+#pragma once
 
 #include <string>
 #include <netdb.h>
@@ -154,4 +153,3 @@ private:
 	char *buffer = NULL;
 };
 
-#endif /* __EPOLLER_H__ */

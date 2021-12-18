@@ -1,6 +1,6 @@
 file(GLOB kqueue_srcs "${CMAKE_CURRENT_SOURCE_DIR}/*.cc")
-add_library(kqueue 
+add_library(multiplexing 
     ${kqueue_srcs}
 )
-target_include_directories(kqueue
+target_include_directories(multiplexing
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
