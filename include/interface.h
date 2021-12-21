@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -22,5 +24,5 @@ class Interface
 {
 public:
     virtual ~Interface() {}
-    virtual void Transfer(bool flag) = 0;
+    virtual int Transfer(std::string comand) = 0;
 };

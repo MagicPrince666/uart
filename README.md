@@ -32,3 +32,9 @@ syscfg print MtSN\r\n
 syscfg print WCAL\r\n
 nandsize\r\n
 ```
+
+## Linux命令
+```
+echo WLACC > /dev/ttyUSB0
+echo "directory fs0:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata" > /dev/ttyUSB0
+```

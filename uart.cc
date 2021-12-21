@@ -30,8 +30,8 @@ Uart::Uart(Xepoll *epoll, std::string device)
         std::cout <<"can\'t open " << device <<" !" << std::endl;
     } else tcflush(uart_fd_, TCIOFLUSH);//清空串口输入输出缓存
 
-    std::string cmd = "WLACC\r\n";
-    sendData(cmd.c_str(), cmd.size());
+    // std::string cmd = "WLACC\r\n";
+    // sendData(cmd.c_str(), cmd.size());
 
     // 绑定回调函数
     if (uart_fd_ > 0) {
@@ -133,4 +133,11 @@ bool Uart::UartRead()
     std::cout << buf << std::endl;
     delete[] buf;
     return true;
+}
+
+int Uart::Transfer(std::string comand)
+{
+    std::cout << BLUE << comand << "\n";
+    int ret = sendData(comand.c_str(), comand.size());
+    return ret;
 }

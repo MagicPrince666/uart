@@ -3,8 +3,9 @@
 #include <inttypes.h>
 #include <string>
 #include "xepoll.h"
+#include "interface.h"
 
-class Uart
+class Uart : public Interface
 {
 public:
     Uart(Xepoll *epoll, std::string device = "/dev/ttyUSB0");
@@ -13,6 +14,8 @@ public:
     int RecvData(char* bufin);
     bool UartLoop();
     bool UartRead();
+
+    int Transfer(std::string comand);
 
 private:
     Xepoll *epoll_;

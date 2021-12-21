@@ -9,10 +9,11 @@
 #pragma once
 
 #include "xepoll.h"
+#include "interface.h"
 
 class Inotify {
  public:
-  Inotify(Xepoll *epoll, const std::string& name);
+  Inotify(Xepoll *epoll, Interface *interface, const std::string name);
   ~Inotify();
 
   int handle_event();
@@ -25,4 +26,7 @@ class Inotify {
     int nread;
     char buf[BUFSIZ];
     struct inotify_event *event;
+    Interface *m_interface_;
+    std::string file_name_;
+    std::string ReadFileIntoString(const std::string& path);
 };
