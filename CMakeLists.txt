@@ -30,12 +30,11 @@ ELSEIF (UNIX)
     add_subdirectory(epoll)
 ENDIF ()
 
-set(EXEC_NAME wlutils)
+set(EXEC_NAME uart)
 
 add_executable(${EXEC_NAME} main.cc
     uart.cc
     inotify.cc
-    common.cc
 )
 
 target_link_libraries(${EXEC_NAME} 
