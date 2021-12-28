@@ -20,12 +20,7 @@ class Inotify {
 
  private:
     Xepoll *epoll_;
-    int fd;
-    int wd;
-    int len;
-    int nread;
-    char buf[BUFSIZ];
-    struct inotify_event *event;
+    int inotify_fd_;
     Interface *m_interface_;
     std::string file_name_;
     std::string ReadFileIntoString(const std::string& path);

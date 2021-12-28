@@ -41,8 +41,8 @@ const char *event_str[EVENT_NUM] =
 Inotify::Inotify(Xepoll *epoll, Interface *interface, const std::string name)
 : epoll_(epoll), m_interface_(interface), file_name_(name)
 {
-    fd = inotify_init();
-    if (fd < 0) {
+    inotify_fd_ = inotify_init();
+    if (inotify_fd_ < 0) {
         fprintf(stderr, "inotify_init failed\n");
         exit(1);
     }
@@ -54,18 +54,19 @@ Inotify::Inotify(Xepoll *epoll, Interface *interface, const std::string name)
         file.close();
     }
 
-    wd = inotify_add_watch(fd, name.c_str(), IN_ALL_EVENTS);
+    int wd = inotify_add_watch(inotify_fd_, name.c_str(), IN_ALL_EVENTS);
     if (wd < 0) {
         fprintf(stderr, "inotify_add_watch %s failed\n", name.c_str());
         exit(1);
-    } else epoll_->add(fd, std::bind(&Inotify::handle_event, this));
+    } else epoll_->add(inotify_fd_, std::bind(&Inotify::handle_event, this));
 
 }
 
 Inotify::~Inotify()
 {
-    close(fd);
-    std::cout << "inotify deinit" << std::endl;
+    if(inotify_fd_ > 0) {
+        close(inotify_fd_);
+    }
 }
 
 std::string Inotify::ReadFileIntoString(const std::string& path) {
@@ -78,28 +79,23 @@ std::string Inotify::ReadFileIntoString(const std::string& path) {
 
 int Inotify::handle_event()
 {
-    if((len = read(fd, buf, sizeof(buf) - 1)) > 0) {
-        nread = 0;
+    int len;
+    int nread = 0;
+    char buf[BUFSIZ];
+    struct inotify_event *event;
+    if((len = read(inotify_fd_, buf, sizeof(buf) - 1)) > 0) {
         while (len > 0) {
             event = (struct inotify_event *)&buf[nread];
-            for (int i = 0; i < EVENT_NUM; i++) {
-                if ((event->mask >> i) & 1) {
-                    if (event->len > 0) {
-                        fprintf(stdout, "%s --- %s\n", event->name, event_str[i]);
-                    } else {
-                        if(i == 3) {
-                            // fprintf(stdout, "%s --- %s\n", " ", event_str[i]);
-                            std::string get_cmd = ReadFileIntoString(file_name_);
-                            if(nullptr != m_interface_) {
-                                m_interface_->Transfer(get_cmd);
-                            }
-                        }
-                    }
+
+            if(event->mask & IN_CLOSE_WRITE) { //关闭并写入，视为成功输入一条命令
+                std::string get_cmd = ReadFileIntoString(file_name_);
+                if(nullptr != m_interface_) {
+                    m_interface_->Transfer(get_cmd);
                 }
             }
             nread = nread + sizeof(struct inotify_event) + event->len;
             len = len - sizeof(struct inotify_event) - event->len;
         }
     }
-    return 0;
+    return len;
 }

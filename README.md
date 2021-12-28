@@ -1,40 +1,62 @@
 # 硬盘烧录工具
 ```
-true\r\n
-directory fs0:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\r\n
-directory fs1:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\r\n
-directory fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\r\n
-cat -h fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\\bbpv-00000065-D3112429000026E279293906\r\n
-cat -h fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\\seal-00008015-00184440289B002E\r\n
+true
+directory fs0:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata
+directory fs1:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata
+directory fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata
+cat -h fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\\bbpv-00000065-D3112429000026E279293906
+cat -h fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\\seal-00008015-00184440289B002E
 ```
 
 
 //iboot 指令
 ```
 WLACC
-syscfg print SrNm\r\n
-syscfg print Mod#\r\n
-syscfg print Regn\r\n
-syscfg print RMd#\r\n
-syscfg print MLB#\r\n
-syscfg print WMac\r\n
-syscfg print BMac\r\n
-syscfg print EMac\r\n
-syscfg print CLHS\r\n
-syscfg print DClr\r\n
-syscfg print NvSn\r\n
-syscfg print NSrN\r\n
-syscfg print LCM#\r\n
-syscfg print Batt\r\n
-syscfg print BCMS\r\n
-syscfg print FCMS\r\n
-syscfg print MtSN\r\n
-syscfg print WCAL\r\n
-nandsize\r\n
+syscfg print SrNm
+syscfg print Mod#
+syscfg print Regn
+syscfg print RMd#
+syscfg print MLB#
+syscfg print WMac
+syscfg print BMac
+syscfg print EMac
+syscfg print CLHS
+syscfg print DClr
+syscfg print NvSn
+syscfg print NSrN
+syscfg print LCM#
+syscfg print Batt
+syscfg print BCMS
+syscfg print FCMS
+syscfg print MtSN
+syscfg print WCAL
+nandsize
 ```
 
-## Linux命令
+## 命令下发
 ```
-echo WLACC > /dev/ttyUSB0
-echo "directory fs0:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata" > /dev/ttyUSB0
+echo WLACC > /tmp/text
+echo "syscfg print SrNm" > /tmp/text
+echo "syscfg print Mod#" > /tmp/text
+echo "syscfg print RMd#" > /tmp/text
+echo "syscfg print MLB#" > /tmp/text
+echo "syscfg print WMac" > /tmp/text
+echo "syscfg print BMac" > /tmp/text
+echo "syscfg print EMac" > /tmp/text
+echo "syscfg print CLHS" > /tmp/text
+echo "syscfg print DClr" > /tmp/text
+echo "syscfg print NvSn" > /tmp/text
+echo "syscfg print NSrN" > /tmp/text
+echo "syscfg print LCM#" > /tmp/text
+echo "syscfg print BCMS" > /tmp/text
+echo "syscfg print FCMS" > /tmp/text
+echo "syscfg print MtSN" > /tmp/text
+echo "syscfg print WCAL" > /tmp/text
+echo "nandsize" > /tmp/text
+
+echo "directory fs0:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata" > /tmp/text
+echo "directory fs1:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata" > /tmp/text
+echo "directory fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata" > /tmp/text
+echo "cat -h fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\\bbpv-00000065-D3112429000026E279293906" > /tmp/text
+echo "cat -h fs2:\\FactoryData\\System\\Library\\Caches\\com.apple.factorydata\\seal-00008015-00184440289B002E" > /tmp/text
 ```
