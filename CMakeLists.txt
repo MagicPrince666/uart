@@ -1,7 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 option(EXAMPLE "shall we complie example" on)
-INCLUDE(build_for_h3)
 #INCLUDE(build_for_rk3308)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -34,7 +33,6 @@ set(EXEC_NAME uart)
 
 add_executable(${EXEC_NAME} main.cc
     uart.cc
-    inotify.cc
 )
 
 target_link_libraries(${EXEC_NAME} 

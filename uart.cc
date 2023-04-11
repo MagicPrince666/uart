@@ -299,11 +299,10 @@ bool Uart::UartLoop()
 
 bool Uart::UartRead()
 {
-    char* buf = new char[DATA_LEN];
+    char buf[DATA_LEN];
     int len = read(uart_fd_, buf, DATA_LEN);
-    buf[len] = 0;
-    std::cout << buf << std::endl;
-    delete[] buf;
+    // buf[len] = 0;
+    // std::cout << buf << std::endl;
     return true;
 }
 
